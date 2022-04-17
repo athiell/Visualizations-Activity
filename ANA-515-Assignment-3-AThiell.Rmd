@@ -1,0 +1,37 @@
+---
+title: "ANA 515 Visualizations"
+author: "Amanda Thiell"
+date: "4/17/2022"
+output:
+  html_document:
+    theme:
+      bootswatch: cerulean
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r install, include=FALSE}
+options(repos = list(CRAN="http://cran.rstudio.com/"))
+install.packages("ggplot2")
+library(ggplot2)
+```
+
+```{r dataset, include=FALSE}
+url <- "https://raw.githubusercontent.com/fivethirtyeight/data/master/college-majors/recent-grads.csv"
+recentgrads <- read.csv(url)
+```
+
+The first visualization seen below explores the variance in unemployment rates per major, split by the associated major category in a series of scatterplots. This arrangement allows easy evaluation of which major category showed results of the lowest and highest rates of unemployment.
+
+```{r plot, include=TRUE}
+ggplot(recentgrads, aes(Major, Unemployment_rate)) + geom_point(aes(color = Major_category)) + scale_y_continuous("Unemployment Rate", breaks = seq(0,0.5,by = 0.05))+ theme_bw() + labs(title="Scatterplot - Unemployment Rate by Major Category") + facet_wrap( ~ Major_category)
+```
+
+Second, we can review the total number of individuals in each major category, which includes all associated majors for each. As shown below, there is a large gap between the number of students in a "business" degree compared to other categories. In the distribution below, major "food science" contained no data, so that was removed from the comparison.
+
+```{r totals, include=TRUE}
+ggplot(recentgrads, aes(Major_category, Total)) + geom_bar(stat = "identity", fill = "magenta") + scale_x_discrete("Major Category")+ scale_y_continuous("Number of Individuals", breaks = seq(0,1600000, by = 100000))+ theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) + labs(title = "Bar Chart - Individuals per Major Category")
+```
+
